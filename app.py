@@ -75,10 +75,6 @@ with st.sidebar:
     - K-Means Clustering
     """)
 
-# =====================================================
-# INPUT DATA
-# =====================================================
-
 st.subheader("📋 Input Data Mahasiswa")
 
 col1, col2 = st.columns(2)
@@ -90,18 +86,18 @@ with col1:
         ["Male", "Female"]
     )
 
-    previous_grade = st.slider(
+    previous_grade = st.number_input(
         "Previous Grade",
-        0,
-        100,
-        75
+        min_value=0.0,
+        max_value=100.0,
+        value=75.0
     )
 
-    extracurricular = st.slider(
+    extracurricular = st.number_input(
         "Extracurricular Activities",
-        0,
-        10,
-        2
+        min_value=0,
+        max_value=10,
+        value=2
     )
 
     parental_support = st.selectbox(
@@ -111,27 +107,26 @@ with col1:
 
 with col2:
 
-    study_hours = st.slider(
+    study_hours = st.number_input(
         "Study Hours",
-        0,
-        15,
-        5
+        min_value=0.0,
+        max_value=15.0,
+        value=5.0
     )
 
-    attendance = st.slider(
+    attendance = st.number_input(
         "Attendance (%)",
-        0,
-        100,
-        80
+        min_value=0.0,
+        max_value=100.0,
+        value=80.0
     )
 
-    online_classes = st.slider(
+    online_classes = st.number_input(
         "Online Classes Taken",
-        0,
-        10,
-        2
+        min_value=0,
+        max_value=10,
+        value=2
     )
-
 # =====================================================
 # ENCODING
 # =====================================================
