@@ -7,7 +7,7 @@ import joblib
 # =====================================================
 
 st.set_page_config(
-    page_title="Student Graduation Prediction",
+    page_title="Student Graduation Prediction System",
     page_icon="🎓",
     layout="wide"
 )
@@ -25,9 +25,13 @@ st.markdown("""
 
 .stButton > button {
     width: 100%;
-    height: 60px;
-    font-size: 20px;
+    height: 55px;
+    font-size: 18px;
     font-weight: bold;
+}
+
+.block-container {
+    padding-top: 2rem;
 }
 
 </style>
@@ -49,7 +53,9 @@ scaler = joblib.load("scaler.pkl")
 st.title("🎓 Student Graduation Prediction System")
 
 st.markdown("""
-Sistem Prediksi Kelulusan Mahasiswa menggunakan:
+### Sistem Prediksi Kelulusan Mahasiswa
+
+Model yang digunakan:
 
 - 🌳 Decision Tree
 - 🌲 Random Forest
@@ -66,14 +72,34 @@ with st.sidebar:
 
     st.header("📚 Informasi")
 
-    st.info("""
-    Data Science Project
+    st.write("""
+    Sistem ini digunakan untuk:
 
-    Model:
+    ✅ Prediksi Kelulusan Mahasiswa
+
+    ✅ Analisis Decision Tree
+
+    ✅ Analisis Random Forest
+
+    ✅ Pengelompokan Mahasiswa menggunakan K-Means
+    """)
+
+    st.divider()
+
+    st.subheader("👨‍🎓 Data Science Project")
+
+    st.write("""
+    Machine Learning:
     - Decision Tree
     - Random Forest
-    - K-Means Clustering
+
+    Clustering:
+    - K-Means
     """)
+
+# =====================================================
+# FORM INPUT
+# =====================================================
 
 st.subheader("📋 Input Data Mahasiswa")
 
@@ -90,14 +116,16 @@ with col1:
         "Previous Grade",
         min_value=0.0,
         max_value=100.0,
-        value=75.0
+        value=75.0,
+        step=1.0
     )
 
     extracurricular = st.number_input(
         "Extracurricular Activities",
         min_value=0,
-        max_value=10,
-        value=2
+        max_value=20,
+        value=2,
+        step=1
     )
 
     parental_support = st.selectbox(
@@ -110,23 +138,23 @@ with col2:
     study_hours = st.number_input(
         "Study Hours",
         min_value=0.0,
-        max_value=15.0,
-        value=5.0
+        max_value=20.0,
+        value=5.0,
+        step=0.5
     )
 
     attendance = st.number_input(
         "Attendance (%)",
         min_value=0.0,
         max_value=100.0,
-        value=80.0
+        value=80.0,
+        step=1.0
     )
 
-    online_classes = st.number_input(
-        "Online Classes Taken",
-        min_value=0,
-        max_value=10,
-        value=2
+    online_classes = st.checkbox(
+        "Mengikuti Kelas Online"
     )
+
 # =====================================================
 # ENCODING
 # =====================================================
@@ -141,8 +169,10 @@ parental_map = {
 
 parental_val = parental_map[parental_support]
 
+online_classes_val = 1 if online_classes else 0
+
 # =====================================================
-# TOMBOL PREDIKSI
+# PREDIKSI
 # =====================================================
 
 if st.button("🔍 Prediksi Sekarang"):
@@ -154,7 +184,7 @@ if st.button("🔍 Prediksi Sekarang"):
         parental_val,
         study_hours,
         attendance,
-        online_classes
+        online_classes_val
     ]],
     columns=[
         'Gender',
@@ -176,13 +206,13 @@ if st.button("🔍 Prediksi Sekarang"):
 
     st.divider()
 
-    st.header("📊 Hasil Prediksi")
+    st.header("📊 Hasil Analisis")
 
     col_a, col_b = st.columns(2)
 
-    # ==============================
+    # =================================================
     # DECISION TREE
-    # ==============================
+    # =================================================
 
     with col_a:
 
@@ -193,9 +223,9 @@ if st.button("🔍 Prediksi Sekarang"):
         else:
             st.error("TIDAK LULUS")
 
-    # ==============================
+    # =================================================
     # RANDOM FOREST
-    # ==============================
+    # =================================================
 
     with col_b:
 
@@ -208,15 +238,16 @@ if st.button("🔍 Prediksi Sekarang"):
 
     st.divider()
 
-    # ==============================
+    # =================================================
     # K-MEANS
-    # ==============================
+    # =================================================
 
-    st.subheader("📈 Hasil Clustering")
+    st.subheader("📊 Hasil Clustering")
 
-    st.info(f"Mahasiswa termasuk Cluster {pred_cluster}")
+    st.info(f"Mahasiswa termasuk dalam Cluster {pred_cluster}")
 
     if pred_cluster == 0:
+
         st.success("""
         Cluster 0
 
@@ -227,6 +258,7 @@ if st.button("🔍 Prediksi Sekarang"):
         """)
 
     elif pred_cluster == 1:
+
         st.success("""
         Cluster 1
 
@@ -237,27 +269,39 @@ if st.button("🔍 Prediksi Sekarang"):
         """)
 
     elif pred_cluster == 2:
+
         st.success("""
         Cluster 2
 
         Karakteristik:
         - Kehadiran tinggi
-        - Aktif kelas daring
+        - Aktif dalam pembelajaran daring
         - Keterlibatan belajar tinggi
         """)
 
     st.divider()
 
+    # =================================================
+    # KESIMPULAN
+    # =================================================
+
     st.subheader("📌 Kesimpulan")
 
     if pred_rf == 1:
+
         st.success(
             "Mahasiswa diprediksi memiliki peluang tinggi untuk lulus."
         )
+
     else:
+
         st.warning(
             "Mahasiswa perlu meningkatkan performa akademiknya untuk meningkatkan peluang kelulusan."
         )
+
+# =====================================================
+# FOOTER
+# =====================================================
 
 st.divider()
 
